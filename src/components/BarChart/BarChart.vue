@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, watchEffect } from "vue";
+import { computed } from "vue";
 import useGeometry from "./useGeometry";
+import useNiceNumbers from "./useNiceNumbers";
 
 export interface Props {
   labels: string[];
@@ -15,35 +16,55 @@ export interface Props {
 const leftmargin = 50;
 
 const props = withDefaults(defineProps<Props>(), {
-  xOffset: 40,
-  yOffset: 40,
+  xOffset: 20,
+  yOffset: 20,
   spaceRatio: 0.2,
   maxWidth: 800,
 });
 
-const { chartWidth, chartHeight, parentWidth, parentHeight } =
-  useGeometry(props);
-
 const maxValue = computed(() => {
   return Math.max(...props.dataset.map((item) => Math.max(...item.values)));
 });
+const ticks = computed(() => useNiceNumbers(0, maxValue.value));
+const maxEffectiveValue = computed(() => ticks.value[ticks.value.length - 1]);
+
+const { chartWidth, chartHeight, parentWidth, parentHeight } =
+  useGeometry(props);
 
 const yScale = computed(() => {
-  return chartHeight.value / maxValue.value;
+  return (chartHeight.value - 2 * props.yOffset) / maxEffectiveValue.value;
 });
 
-const xScale = computed(() => {
-  return (
-    (chartWidth.value - 2 * props.xOffset - leftmargin) / props.labels.length
-  );
+const effectiveDrawWidth = computed(() => {
+  const widthWithoutMargin = chartWidth.value - leftmargin;
+  return widthWithoutMargin - 2 * props.xOffset;
 });
 
 const barWidth = computed(() => {
-  return xScale.value * (1 - props.spaceRatio);
+  const xScale = effectiveDrawWidth.value / props.labels.length;
+  return xScale * (1 - props.spaceRatio);
+});
+
+const barGap = computed(() => {
+  const xScale = effectiveDrawWidth.value / props.labels.length;
+  return xScale * props.spaceRatio;
 });
 
 function getHeight(value: number) {
   return value * yScale.value;
+}
+
+function getYPosition(value: number) {
+  return chartHeight.value - getHeight(value) - props.yOffset;
+}
+
+function getxPosition(index: number) {
+  if (index === 0) {
+    return leftmargin + props.xOffset;
+  }
+
+  const effectiveBarWidth = barWidth.value + barGap.value;
+  return index * effectiveBarWidth + props.xOffset + leftmargin;
 }
 </script>
 
@@ -52,29 +73,54 @@ function getHeight(value: number) {
     {
       chartWidth,
       chartHeight,
-      xScale,
       yScale,
       parentWidth,
       parentHeight,
       maxWidth,
+      ticks,
     }
   }}</pre>
   <svg :width="chartWidth" :height="chartHeight">
-    <line
-      stroke="#ccc"
-      :x="leftmargin + xScale + xOffset / 2"
-      :y="chartHeight - yOffset"
-      :width="chartWidth - xOffset"
-      :x1="leftmargin"
-      :x2="chartWidth - xOffset"
-      :y1="chartHeight - yOffset"
-      :y2="chartHeight - yOffset"
-    ></line>
-    <g v-for="item in dataset" :data-q-name="item.name">
+    <g>
+      <text
+        v-for="value in ticks"
+        :x="leftmargin - String(value).length * 6"
+        text-anchor="end"
+        :y="getYPosition(value) + 3"
+      >
+        <tspan
+          style="
+            font-size: 12px;
+            font-family: sans-serif;
+            fill: #9ca3af;
+            font-weight: 300;
+          "
+        >
+          {{ `${value}%` }}
+        </tspan>
+      </text>
+    </g>
+    <g>
+      <line
+        v-for="value in ticks"
+        stroke="#e5e7eb"
+        :width="chartWidth - xOffset"
+        :x1="leftmargin"
+        :x2="chartWidth - xOffset"
+        :y1="getYPosition(value)"
+        :y2="getYPosition(value)"
+      />
+    </g>
+    <g
+      v-for="item in dataset"
+      :data-q-name="item.name"
+      :data-width="effectiveDrawWidth"
+    >
       <rect
         v-for="(value, index) in item.values"
-        :x="leftmargin + index * xScale + xOffset / 2"
-        :y="chartHeight - getHeight(value) - yOffset"
+        :x="getxPosition(index)"
+        :y="getYPosition(value)"
+        :data-idx="index"
         :width="barWidth"
         :height="getHeight(value)"
         :fill="item.color"
