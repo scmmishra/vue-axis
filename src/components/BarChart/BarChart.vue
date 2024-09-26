@@ -8,11 +8,13 @@ export interface Props {
   height?: number;
   maxWidth?: number;
   spaceRatio?: number;
-  offset?: number;
+  xOffset?: number;
+  yOffset?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  offset: 10,
+  xOffset: 20,
+  yOffset: 20,
   spaceRatio: 0.2,
   maxWidth: 800,
 });
@@ -29,7 +31,7 @@ const yScale = computed(() => {
 });
 
 const xScale = computed(() => {
-  return (chartWidth.value - props.offset) / props.labels.length;
+  return (chartWidth.value - 2 * props.xOffset) / props.labels.length;
 });
 
 const barWidth = computed(() => {
@@ -54,11 +56,21 @@ function getHeight(value: number) {
     }
   }}</pre>
   <svg :width="chartWidth" :height="chartHeight">
+    <line
+      stroke="#ccc"
+      :x="xScale + xOffset / 2"
+      :y="chartHeight - yOffset"
+      :width="chartWidth - xOffset"
+      :x1="0"
+      :x2="chartWidth - xOffset"
+      :y1="chartHeight - yOffset"
+      :y2="chartHeight - yOffset"
+    ></line>
     <g v-for="item in dataset" :data-q-name="item.name">
       <rect
         v-for="(value, index) in item.values"
-        :x="index * xScale + offset / 2"
-        :y="chartHeight - getHeight(value) - offset"
+        :x="index * xScale + xOffset / 2"
+        :y="chartHeight - getHeight(value) - yOffset"
         :width="barWidth"
         :height="getHeight(value)"
         :fill="item.color"

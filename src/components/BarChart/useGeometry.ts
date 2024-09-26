@@ -6,7 +6,8 @@ interface PropsWithDefaults {
   dataset: { values: number[]; name: string; color: string }[];
   maxWidth: number;
   spaceRatio: number;
-  offset: number;
+  xOffset: number;
+  yOffset: number;
   height?: number;
 }
 
@@ -25,7 +26,8 @@ export default function useGeometry(props: PropsWithDefaults) {
 
   watch(() => props.maxWidth, computeGeometry);
   watch(() => props.height, computeGeometry);
-  watch(() => props.offset, computeGeometry);
+  watch(() => props.xOffset, computeGeometry);
+  watch(() => props.yOffset, computeGeometry);
 
   onMounted(computeGeometry);
 
