@@ -88,11 +88,6 @@ const dataset = [
 
 <template>
   <Story title="Bar Chart" :layout="{ type: 'grid', width: 900 }">
-    <BarChart
-      :height="400"
-      :max-width="900"
-      :labels="labels"
-      :dataset="dataset"
-    />
+    <BarChart :max-width="900" :labels="labels" :dataset="dataset" />
   </Story>
 </template>
