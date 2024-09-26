@@ -75,11 +75,11 @@ const labels = [
   "2020-12-31",
   "2021-12-31",
   "2022-12-31",
-];
+].splice(0, 50);
 
 const dataset = [
   {
-    values: data,
+    values: data.splice(0, 50),
     color: "#10b981",
     name: "Inflation Rate (%)",
   },
