@@ -60,11 +60,15 @@ function getYPosition(value: number) {
 
 function getxPosition(index: number) {
   if (index === 0) {
-    return leftmargin + props.xOffset;
+    // shift this by barGap / 2 to align the gap halfway on each side of the bar
+    return leftmargin + props.xOffset + barGap.value / 2;
   }
 
   const effectiveBarWidth = barWidth.value + barGap.value;
-  return index * effectiveBarWidth + props.xOffset + leftmargin;
+  // shift this by barGap / 2 to align the gap halfway on each side of the bar
+  return (
+    index * effectiveBarWidth + props.xOffset + leftmargin + barGap.value / 2
+  );
 }
 </script>
 
@@ -104,9 +108,9 @@ function getxPosition(index: number) {
       <line
         v-for="value in ticks"
         stroke="#e5e7eb"
-        :width="chartWidth - xOffset"
+        :width="chartWidth - leftmargin"
         :x1="leftmargin"
-        :x2="chartWidth - xOffset"
+        :x2="chartWidth"
         :y1="getYPosition(value)"
         :y2="getYPosition(value)"
       />
