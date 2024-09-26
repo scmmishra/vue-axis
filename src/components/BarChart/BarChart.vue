@@ -12,12 +12,12 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  offset: 50,
+  offset: 10,
   spaceRatio: 0.2,
   maxWidth: 800,
 });
 
-const { chartWidth, chartHeight, yOffset, parentWidth, parentHeight } =
+const { chartWidth, chartHeight, parentWidth, parentHeight } =
   useGeometry(props);
 
 const maxValue = computed(() => {
@@ -29,7 +29,7 @@ const yScale = computed(() => {
 });
 
 const xScale = computed(() => {
-  return chartWidth.value / props.labels.length;
+  return (chartWidth.value - props.offset) / props.labels.length;
 });
 
 const barWidth = computed(() => {
@@ -46,7 +46,6 @@ function getHeight(value: number) {
     {
       chartWidth,
       chartHeight,
-      yOffset,
       xScale,
       yScale,
       parentWidth,
@@ -58,8 +57,8 @@ function getHeight(value: number) {
     <g v-for="item in dataset" :data-q-name="item.name">
       <rect
         v-for="(value, index) in item.values"
-        :x="index * xScale"
-        :y="yOffset - getHeight(value)"
+        :x="index * xScale + offset / 2"
+        :y="chartHeight - getHeight(value) - offset"
         :width="barWidth"
         :height="getHeight(value)"
         :fill="item.color"

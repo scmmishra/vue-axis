@@ -15,17 +15,12 @@ export default function useGeometry(props: PropsWithDefaults) {
   const { width: parentWidth, height: parentHeight } =
     useElementBounding(parent);
 
-  let chartWidth = ref(useClamp(parentWidth, 0, props.maxWidth).value);
-  let chartHeight = ref(props.height ?? Math.round(chartWidth.value / 2.6));
-  let xOffset = ref(chartWidth.value - props.offset);
-  let yOffset = ref(chartHeight.value - props.offset);
+  const chartWidth = ref(0);
+  const chartHeight = ref(0);
 
   const computeGeometry = () => {
     chartWidth.value = Math.max(Math.min(parentWidth.value, props.maxWidth), 0);
     chartHeight.value = props.height ?? Math.round(chartWidth.value / 2.6);
-
-    xOffset.value = chartWidth.value - props.offset;
-    yOffset.value = chartHeight.value - props.offset;
   };
 
   watch(() => props.maxWidth, computeGeometry);
@@ -37,8 +32,6 @@ export default function useGeometry(props: PropsWithDefaults) {
   return {
     chartWidth,
     chartHeight,
-    xOffset,
-    yOffset,
     parentWidth,
     parentHeight,
   };

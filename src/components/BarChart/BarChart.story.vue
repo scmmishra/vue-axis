@@ -80,7 +80,7 @@ const labels = [
 const dataset = [
   {
     values: data,
-    color: "#3e517a",
+    color: "#10b981",
     name: "Inflation Rate (%)",
   },
 ];
