@@ -11,6 +11,8 @@ export interface Props {
   spaceRatio?: number;
   xOffset?: number;
   yOffset?: number;
+  disableAnimation?: boolean;
+  animationDuration?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -18,6 +20,8 @@ const props = withDefaults(defineProps<Props>(), {
   yOffset: 20,
   spaceRatio: 0.2,
   maxWidth: 800,
+  disableAnimation: false,
+  animationDuration: 100,
 });
 
 const maxValue = computed(() => {
@@ -36,6 +40,10 @@ const {
   getxPosition,
   drawWidth,
 } = useGeometry(props, maxEffectiveValue);
+
+const getAnimationDelay = (index: number) => {
+  return index * 2;
+};
 </script>
 
 <template>
@@ -74,12 +82,35 @@ const {
       <rect
         v-for="(value, index) in item.values"
         :x="getxPosition(index)"
-        :y="getYPosition(value)"
+        :y="containerHeight - props.yOffset"
         :data-idx="index"
         :width="barWidth"
-        :height="getHeight(value)"
+        :height="0"
         :fill="item.color"
-      />
+      >
+        <animate
+          v-if="!disableAnimation"
+          attributeName="height"
+          :from="0"
+          :to="getHeight(value)"
+          :dur="`${props.animationDuration}ms`"
+          :begin="`${getAnimationDelay(index)}ms`"
+          fill="freeze"
+          calcMode="spline"
+          keySplines="0.215, 0.61, 0.355, 1"
+        />
+        <animate
+          v-if="!disableAnimation"
+          attributeName="y"
+          :from="containerHeight - props.yOffset"
+          :to="getYPosition(value)"
+          :dur="`${props.animationDuration}ms`"
+          :begin="`${getAnimationDelay(index)}ms`"
+          fill="freeze"
+          calcMode="spline"
+          keySplines="0.215, 0.61, 0.355, 1"
+        />
+      </rect>
     </g>
   </svg>
 </template>
