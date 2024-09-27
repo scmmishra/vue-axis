@@ -1,6 +1,6 @@
 <script setup>
 import SVGText from "./SVGText.vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import useGeometry from "./useGeometry";
 import useNiceNumbers from "./useNiceNumbers";
 
@@ -39,6 +39,8 @@ const props = defineProps({
 });
 
 const hoverIndex = ref(null);
+const hoverRectX = ref(0);
+const isHovering = ref(false);
 
 const maxValue = computed(() => {
   return Math.max(...props.dataset.map((item) => Math.max(...item.values)));
@@ -77,19 +79,28 @@ const {
   barGap,
   getHeight,
   getYPosition,
-  getxPosition,
+  getXPosition,
   drawWidth,
 } = useGeometry(props, maxEffectiveValue);
+
+watch(hoverIndex, (newIndex) => {
+  if (newIndex !== null) {
+    hoverRectX.value = getXPosition(newIndex) - barGap.value / 2;
+    isHovering.value = true;
+  } else {
+    isHovering.value = false;
+  }
+});
 </script>
 
 <template>
   <svg :width="containerWidth" :height="containerHeight">
     <rect
-      v-if="hoverIndex !== null"
       class="q-hover-rect"
+      :class="{ 'is-hovering': isHovering }"
+      :opacity="isHovering ? 0.5 : 0"
       fill="#f1f5f9"
-      opacity="0.5"
-      :x="getxPosition(hoverIndex) - barGap / 2"
+      :x="hoverRectX"
       :y="yOffset"
       :width="barWidth + barGap"
       :height="containerHeight - 2 * yOffset"
@@ -107,7 +118,7 @@ const {
     <g class="q-x-ticks">
       <SVGText
         v-for="(label, index) in labels"
-        :x="getxPosition(index) + barWidth / 2"
+        :x="getXPosition(index) + barWidth / 2"
         :y="containerHeight"
         :width="barWidth"
         text-anchor="middle"
@@ -134,14 +145,12 @@ const {
     >
       <rect
         v-for="(value, index) in item.values"
-        :x="getxPosition(index)"
+        :x="getXPosition(index)"
         :y="containerHeight - props.yOffset"
         :data-idx="index"
         :width="barWidth"
         :height="0"
         :fill="item.color"
-        @mouseover="() => (hoverIndex = index)"
-        @mouseleave="() => (hoverIndex = null)"
       >
         <animate
           v-if="!disableAnimation"
@@ -166,6 +175,30 @@ const {
           keySplines="0.215, 0.61, 0.355, 1"
         />
       </rect>
+      <rect
+        v-for="(value, index) in item.values"
+        :x="getXPosition(index) - barGap / 2"
+        :y="yOffset"
+        :data-idx="index"
+        :width="barWidth + barGap"
+        :height="containerHeight - 2 * yOffset"
+        fill="transparent"
+        @mouseover="() => (hoverIndex = index)"
+        @mouseleave="() => (hoverIndex = null)"
+      />
     </g>
   </svg>
 </template>
+<style scoped>
+.q-hover-rect {
+  transition:
+    x 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.q-hover-rect.is-hovering {
+  transition:
+    x 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+</style>

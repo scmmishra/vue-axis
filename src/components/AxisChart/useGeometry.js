@@ -50,7 +50,7 @@ export default function useGeometry(props, maxValue) {
     return containerHeight.value - getHeight(value) - props.yOffset;
   }
 
-  function getxPosition(index) {
+  function getXPosition(index) {
     if (index === 0) {
       // shift this by barGap / 2 to align the gap halfway on each side of the bar
       return leftmargin + props.xOffset + barGap.value / 2;
@@ -76,6 +76,6 @@ export default function useGeometry(props, maxValue) {
     getHeight,
     drawWidth,
     getYPosition,
-    getxPosition,
+    getXPosition,
   };
 }
