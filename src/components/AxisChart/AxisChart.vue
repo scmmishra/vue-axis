@@ -3,6 +3,26 @@ import { computed } from "vue";
 import useGeometry from "./useGeometry";
 import useNiceNumbers from "./useNiceNumbers";
 
+/**
+ * @typedef {Object} DatasetItem
+ * @property {number[]} values - Array of numerical values
+ * @property {string} name - Name of the dataset
+ * @property {string} color - Color of the dataset
+ */
+
+/**
+ * @type {import('vue').PropType<{
+ *   labels: string[],
+ *   dataset: DatasetItem[],
+ *   height?: number,
+ *   maxWidth?: number,
+ *   spaceRatio?: number,
+ *   xOffset?: number,
+ *   yOffset?: number,
+ *   disableAnimation?: boolean,
+ *   animationDuration?: number
+ * }>}
+ */
 const props = defineProps({
   labels: { type: Array, required: true },
   dataset: { type: Array, required: true },
