@@ -56,12 +56,12 @@ const getAnimationDelay = (index: number) => {
         :y="getYPosition(value) + 3"
       >
         <tspan
-          style="
-            font-size: 12px;
-            font-family: sans-serif;
-            fill: #9ca3af;
-            font-weight: 300;
-          "
+          :style="{
+            fontSize: '12px',
+            fontFamily: 'sans-serif',
+            fill: '#9ca3af',
+            fontWeight: 300,
+          }"
         >
           {{ `${value}%` }}
         </tspan>
