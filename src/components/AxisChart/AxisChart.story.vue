@@ -2,8 +2,8 @@
 import AxisChart from "./AxisChart.vue";
 import { generateNumbers, generateDates } from "utils/generator";
 
-const data = generateNumbers(8, 1, 100);
-const labels = generateDates(8, "year");
+const data = generateNumbers(15, 1, 100);
+const labels = generateDates(15, "year");
 
 const formatXAxis = (value) => {
   return new Date(value).getFullYear();
