@@ -1,6 +1,6 @@
 <script setup>
 import SVGText from "./SVGText.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import useGeometry from "./useGeometry";
 import useNiceNumbers from "./useNiceNumbers";
 
@@ -38,30 +38,16 @@ const props = defineProps({
   formatY: { type: Function, default: null },
 });
 
+const hoverIndex = ref(null);
+
 const maxValue = computed(() => {
   return Math.max(...props.dataset.map((item) => Math.max(...item.values)));
 });
 const ticks = computed(() => useNiceNumbers(0, maxValue.value));
 const maxEffectiveValue = computed(() => ticks.value[ticks.value.length - 1]);
 
-const {
-  leftmargin,
-  containerWidth,
-  containerHeight,
-  barWidth,
-  getHeight,
-  getYPosition,
-  getxPosition,
-  drawWidth,
-} = useGeometry(props, maxEffectiveValue);
-
-const getAnimationDelay = (index) => {
-  return index * 2;
-};
-
-function isDate(obj) {
-  return Object.prototype.toString.call(obj) === "[object Date]";
-}
+const getAnimationDelay = (index) => index * 2;
+const isDate = (obj) => Object.prototype.toString.call(obj) === "[object Date]";
 
 const formatTick = (tick) => {
   if (props.formatY) {
@@ -82,11 +68,33 @@ const formatLabel = (label) => {
 
   return label;
 };
+
+const {
+  leftmargin,
+  containerWidth,
+  containerHeight,
+  barWidth,
+  barGap,
+  getHeight,
+  getYPosition,
+  getxPosition,
+  drawWidth,
+} = useGeometry(props, maxEffectiveValue);
 </script>
 
 <template>
   <svg :width="containerWidth" :height="containerHeight">
-    <g>
+    <rect
+      v-if="hoverIndex !== null"
+      class="q-hover-rect"
+      fill="#f1f5f9"
+      opacity="0.5"
+      :x="getxPosition(hoverIndex) - barGap / 2"
+      :y="yOffset"
+      :width="barWidth + barGap"
+      :height="containerHeight - 2 * yOffset"
+    />
+    <g class="q-y-ticks">
       <SVGText
         v-for="value in ticks"
         :x="leftmargin - 10"
@@ -96,18 +104,7 @@ const formatLabel = (label) => {
         {{ formatTick(value) }}
       </SVGText>
     </g>
-    <g>
-      <line
-        v-for="value in ticks"
-        stroke="#e5e7eb"
-        :width="containerWidth - leftmargin"
-        :x1="leftmargin"
-        :x2="containerWidth"
-        :y1="getYPosition(value)"
-        :y2="getYPosition(value)"
-      />
-    </g>
-    <g>
+    <g class="q-x-ticks">
       <SVGText
         v-for="(label, index) in labels"
         :x="getxPosition(index) + barWidth / 2"
@@ -118,7 +115,23 @@ const formatLabel = (label) => {
         {{ formatLabel(label) }}
       </SVGText>
     </g>
-    <g v-for="item in dataset" :data-q-name="item.name" :data-width="drawWidth">
+    <g class="q-axis-lines">
+      <line
+        v-for="value in ticks"
+        stroke="#e5e7eb"
+        :width="containerWidth - leftmargin"
+        :x1="leftmargin"
+        :x2="containerWidth"
+        :y1="getYPosition(value)"
+        :y2="getYPosition(value)"
+      />
+    </g>
+    <g
+      v-for="item in dataset"
+      :data-q-name="item.name"
+      :data-width="drawWidth"
+      class="q-bars"
+    >
       <rect
         v-for="(value, index) in item.values"
         :x="getxPosition(index)"
@@ -127,6 +140,8 @@ const formatLabel = (label) => {
         :width="barWidth"
         :height="0"
         :fill="item.color"
+        @mouseover="() => (hoverIndex = index)"
+        @mouseleave="() => (hoverIndex = null)"
       >
         <animate
           v-if="!disableAnimation"
