@@ -1,4 +1,5 @@
 <script setup>
+import SVGText from "./SVGText.vue";
 import { computed } from "vue";
 import useGeometry from "./useGeometry";
 import useNiceNumbers from "./useNiceNumbers";
@@ -33,6 +34,8 @@ const props = defineProps({
   yOffset: { type: Number, default: 20 },
   disableAnimation: { type: Boolean, default: false },
   animationDuration: { type: Number, default: 100 },
+  formatX: { type: Function, default: null },
+  formatY: { type: Function, default: null },
 });
 
 const maxValue = computed(() => {
@@ -55,28 +58,43 @@ const {
 const getAnimationDelay = (index) => {
   return index * 2;
 };
+
+function isDate(obj) {
+  return Object.prototype.toString.call(obj) === "[object Date]";
+}
+
+const formatTick = (tick) => {
+  if (props.formatY) {
+    return props.formatY(tick);
+  }
+
+  return tick;
+};
+
+const formatLabel = (label) => {
+  if (isDate(label) && !props.formatX) {
+    return label.toLocaleDateString();
+  }
+
+  if (props.formatX) {
+    return props.formatX(label);
+  }
+
+  return label;
+};
 </script>
 
 <template>
   <svg :width="containerWidth" :height="containerHeight">
     <g>
-      <text
+      <SVGText
         v-for="value in ticks"
-        :x="leftmargin - String(value).length * 6"
-        text-anchor="end"
+        :x="leftmargin - 10"
         :y="getYPosition(value) + 3"
+        text-anchor="end"
       >
-        <tspan
-          :style="{
-            fontSize: '12px',
-            fontFamily: 'sans-serif',
-            fill: '#9ca3af',
-            fontWeight: 300,
-          }"
-        >
-          {{ `${value}%` }}
-        </tspan>
-      </text>
+        {{ formatTick(value) }}
+      </SVGText>
     </g>
     <g>
       <line
@@ -88,6 +106,16 @@ const getAnimationDelay = (index) => {
         :y1="getYPosition(value)"
         :y2="getYPosition(value)"
       />
+    </g>
+    <g>
+      <SVGText
+        v-for="(label, index) in labels"
+        :x="getxPosition(index)"
+        :y="containerHeight"
+        :width="barWidth"
+      >
+        {{ formatLabel(label) }}
+      </SVGText>
     </g>
     <g v-for="item in dataset" :data-q-name="item.name" :data-width="drawWidth">
       <rect
