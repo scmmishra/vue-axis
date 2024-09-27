@@ -110,9 +110,10 @@ const formatLabel = (label) => {
     <g>
       <SVGText
         v-for="(label, index) in labels"
-        :x="getxPosition(index)"
+        :x="getxPosition(index) + barWidth / 2"
         :y="containerHeight"
         :width="barWidth"
+        text-anchor="middle"
       >
         {{ formatLabel(label) }}
       </SVGText>
