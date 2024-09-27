@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "story:dev": "histoire dev",
     "story:build": "histoire build",
@@ -13,14 +13,12 @@
   },
   "dependencies": {
     "@vueuse/core": "^11.1.0",
-    "vue": "^3.5.8"
+    "vue": "^3.5.9"
   },
   "devDependencies": {
     "@histoire/plugin-vue": "^0.17.17",
-    "@vitejs/plugin-vue": "^5.1.2",
+    "@vitejs/plugin-vue": "^5.1.4",
     "histoire": "^0.17.17",
-    "typescript": "^5.5.3",
-    "vite": "^5.4.1",
-    "vue-tsc": "^2.0.29"
+    "vite": "^5.4.8"
   }
 }

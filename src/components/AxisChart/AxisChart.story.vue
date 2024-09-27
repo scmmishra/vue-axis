@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup>
 import AxisChart from "./AxisChart.vue";
 
 const data = [

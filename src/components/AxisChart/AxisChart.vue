@@ -1,27 +1,18 @@
-<script setup lang="ts">
+<script setup>
 import { computed } from "vue";
 import useGeometry from "./useGeometry";
 import useNiceNumbers from "./useNiceNumbers";
 
-export interface Props {
-  labels: string[];
-  dataset: { values: number[]; name: string; color: string }[];
-  height?: number;
-  maxWidth?: number;
-  spaceRatio?: number;
-  xOffset?: number;
-  yOffset?: number;
-  disableAnimation?: boolean;
-  animationDuration?: number;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  xOffset: 20,
-  yOffset: 20,
-  spaceRatio: 0.2,
-  maxWidth: 800,
-  disableAnimation: false,
-  animationDuration: 100,
+const props = defineProps({
+  labels: { type: Array, required: true },
+  dataset: { type: Array, required: true },
+  height: { type: Number, default: null },
+  maxWidth: { type: Number, default: 800 },
+  spaceRatio: { type: Number, default: 0.2 },
+  xOffset: { type: Number, default: 20 },
+  yOffset: { type: Number, default: 20 },
+  disableAnimation: { type: Boolean, default: false },
+  animationDuration: { type: Number, default: 100 },
 });
 
 const maxValue = computed(() => {
@@ -41,7 +32,7 @@ const {
   drawWidth,
 } = useGeometry(props, maxEffectiveValue);
 
-const getAnimationDelay = (index: number) => {
+const getAnimationDelay = (index) => {
   return index * 2;
 };
 </script>

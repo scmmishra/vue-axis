@@ -1,9 +1,9 @@
-export default function useNiceNumbers(min: number, max: number, ticks = 10) {
+export default function useNiceNumbers(min, max, ticks = 10) {
   if (min === max) {
     return Array.from({ length: ticks }, (_, index) => index + 1);
   }
 
-  function getNiceNumber(candidate: number, round: boolean) {
+  function getNiceNumber(candidate, round) {
     const exponent = Math.floor(Math.log10(candidate));
     const fraction = candidate / Math.pow(10, exponent);
     let niceFraction;
@@ -23,7 +23,7 @@ export default function useNiceNumbers(min: number, max: number, ticks = 10) {
     return niceFraction * Math.pow(10, exponent);
   }
 
-  function roundTo(num: number, decimals: number) {
+  function roundTo(num, decimals) {
     const factor = Math.pow(10, decimals);
     return Math.round(num * factor) / factor;
   }
