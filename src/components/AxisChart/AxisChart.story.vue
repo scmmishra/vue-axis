@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BarChart from "./BarChart.vue";
+import AxisChart from "./AxisChart.vue";
 
 const data = [
   1.7799, 1.6952, 3.6322, 2.9462, 13.3553, 9.4748, 10.8018, 13.0622, 3.2374,
@@ -87,7 +87,7 @@ const dataset = [
 </script>
 
 <template>
-  <Story title="Bar Chart" :layout="{ type: 'grid', width: 900 }">
-    <BarChart :max-width="900" :labels="labels" :dataset="dataset" />
+  <Story title="Axis Chart" :layout="{ type: 'grid', width: 900 }">
+    <AxisChart :max-width="900" :labels="labels" :dataset="dataset" />
   </Story>
 </template>
