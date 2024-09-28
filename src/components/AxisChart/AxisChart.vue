@@ -1,6 +1,7 @@
 <script setup>
 import SVGText from "./SVGText.vue";
-import { computed, ref, watch } from "vue";
+import HoverRect from "./HoverRect.vue";
+import { computed, ref, watch, provide } from "vue";
 import useGeometry from "./useGeometry";
 import useNiceNumbers from "./useNiceNumbers";
 
@@ -91,20 +92,17 @@ watch(hoverIndex, (newIndex) => {
     isHovering.value = false;
   }
 });
+
+// Provide values for inject
+provide("hoverIndex", hoverIndex);
+provide("getXPosition", getXPosition);
+provide("barWidth", barWidth);
+provide("barGap", barGap);
 </script>
 
 <template>
   <svg :width="containerWidth" :height="containerHeight">
-    <rect
-      class="q-hover-rect"
-      :class="{ 'is-hovering': isHovering }"
-      :opacity="isHovering ? 0.5 : 0"
-      fill="#f1f5f9"
-      :x="hoverRectX"
-      :y="yOffset"
-      :width="barWidth + barGap"
-      :height="containerHeight - 2 * yOffset"
-    />
+    <HoverRect :y-offset="yOffset" :container-height="containerHeight" />
     <g class="q-y-ticks">
       <SVGText
         v-for="value in ticks"
@@ -189,16 +187,3 @@ watch(hoverIndex, (newIndex) => {
     </g>
   </svg>
 </template>
-<style scoped>
-.q-hover-rect {
-  transition:
-    x 200ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 200ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.q-hover-rect.is-hovering {
-  transition:
-    x 200ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 200ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-</style>

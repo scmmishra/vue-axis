@@ -16,7 +16,7 @@ const formatYAxis = (value) => {
 const dataset = [
   {
     values: data,
-    color: "#10b981",
+    color: "#2dd4bf",
     name: "Inflation Rate (%)",
   },
 ];
