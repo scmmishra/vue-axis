@@ -98,11 +98,13 @@ provide("hoverIndex", hoverIndex);
 provide("getXPosition", getXPosition);
 provide("barWidth", barWidth);
 provide("barGap", barGap);
+provide("containerHeight", containerHeight);
+provide("yOffset", props.yOffset);
 </script>
 
 <template>
   <svg :width="containerWidth" :height="containerHeight">
-    <HoverRect :y-offset="yOffset" :container-height="containerHeight" />
+    <HoverRect />
     <g class="q-y-ticks">
       <SVGText
         v-for="value in ticks"

@@ -1,15 +1,12 @@
 <script setup>
 import { computed, inject } from "vue";
 
-const props = defineProps({
-  yOffset: { type: Number, required: true },
-  containerHeight: { type: Number, required: true },
-});
-
 const hoverIndex = inject("hoverIndex");
 const getXPosition = inject("getXPosition");
 const barWidth = inject("barWidth");
 const barGap = inject("barGap");
+const yOffset = inject("yOffset");
+const containerHeight = inject("containerHeight");
 
 const isHovering = computed(() => hoverIndex.value !== null);
 const hoverRectX = computed(() =>
@@ -18,7 +15,7 @@ const hoverRectX = computed(() =>
     : 0,
 );
 
-const rectHeight = computed(() => props.containerHeight - 2 * props.yOffset);
+const rectHeight = computed(() => containerHeight.value - 2 * yOffset);
 </script>
 
 <template>
