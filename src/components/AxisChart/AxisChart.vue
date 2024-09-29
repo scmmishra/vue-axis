@@ -133,7 +133,7 @@ provideAxisChart({
 <template>
   <svg :width="containerWidth" :height="containerHeight">
     <HoverRect />
-    <g class="q-y-ticks">
+    <g class="va-y-ticks">
       <SVGText
         v-for="value in ticks"
         :x="leftmargin - 10"
@@ -143,7 +143,7 @@ provideAxisChart({
         {{ formatTick(value) }}
       </SVGText>
     </g>
-    <g class="q-x-ticks">
+    <g class="va-x-ticks">
       <SVGText
         v-for="(label, index) in labels"
         :x="getXPosition(index) + barWidth / 2"
@@ -154,7 +154,7 @@ provideAxisChart({
         {{ formatLabel(label) }}
       </SVGText>
     </g>
-    <g class="q-axis-lines">
+    <g class="va-axis-lines">
       <line
         v-for="value in ticks"
         stroke="#e5e7eb"
@@ -167,9 +167,9 @@ provideAxisChart({
     </g>
     <g
       v-for="(item, outerIdx) in dataset"
-      :data-q-name="item.name"
+      :data-va-name="item.name"
       :data-width="drawWidth"
-      class="q-bars"
+      class="va-bars"
     >
       <BarRect
         v-for="(value, index) in item.values"
@@ -181,7 +181,7 @@ provideAxisChart({
         :stacked="props.stacked"
       />
     </g>
-    <g class="q-hover-triggers" style="opacity: 0">
+    <g class="va-hover-triggers" style="opacity: 0">
       <rect
         v-for="(_, index) in labels"
         :x="getXPosition(index) - barGap / 2"

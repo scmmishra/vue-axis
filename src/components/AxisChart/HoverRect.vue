@@ -17,7 +17,7 @@ const rectHeight = computed(() => containerHeight.value - 2 * yOffset);
 
 <template>
   <rect
-    class="q-hover-rect"
+    class="va-hover-rect"
     :class="{ 'is-hovering': isHovering }"
     :opacity="isHovering ? 0.5 : 0"
     fill="#f1f5f9"
@@ -29,13 +29,13 @@ const rectHeight = computed(() => containerHeight.value - 2 * yOffset);
 </template>
 
 <style scoped>
-.q-hover-rect {
+.va-hover-rect {
   transition:
     x 150ms cubic-bezier(0.22, 1, 0.36, 1),
     opacity 150ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.q-hover-rect.is-hovering {
+.va-hover-rect.is-hovering {
   transition:
     x 150ms cubic-bezier(0.22, 1, 0.36, 1),
     opacity 150ms cubic-bezier(0.22, 1, 0.36, 1);
