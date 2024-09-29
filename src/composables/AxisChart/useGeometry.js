@@ -27,6 +27,19 @@ export default function useGeometry(props, maxValue) {
     return (containerHeight.value - 2 * props.yOffset) / maxValue.value;
   });
 
+  /*
+  Container Width and Draw Width Diagram:
+
+  |<---------------------- containerWidth ----------------------->|
+  |                                                               |
+  | leftmargin |<------------------ drawWidth ----------------->| |
+  | this is    |                                                | |
+  | where      |<-xOffset->|                        |<-xOffset->| |
+  | ticks go   |           |                        |           | |
+  |            |           |<-- actual draw area -->|           | |
+  |            |           |                        |           | |
+  */
+
   const drawWidth = computed(() => {
     const widthWithoutMargin = containerWidth.value - leftmargin;
     return widthWithoutMargin - 2 * props.xOffset;
@@ -41,6 +54,21 @@ export default function useGeometry(props, maxValue) {
     const xScale = drawWidth.value / props.labels.length;
     return xScale * props.spaceRatio;
   });
+
+  /*
+   Bar Width and Gap Diagram:
+
+   |<-------- xScale -------->|
+   |                          |
+   |<-- barWidth -->|<- gap ->|
+   |                |         |
+   |     █████████  |         |
+   |     █████████  |         |
+   |     █████████  |         |
+   |     █████████  |         |
+   |     █████████  |         |
+   |________________|_________|
+   */
 
   function getHeight(value) {
     return value * yScale.value;
