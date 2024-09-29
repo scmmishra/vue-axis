@@ -68,30 +68,62 @@ const columnWidth = computed(() => {
 
 const xPos = computed(() => {
   if (stacked) {
+    // For stacked bars, all bars in a stack share the same x-position
+    // Just return the x-position for this index
     return getXPosition(props.index);
   }
+  // For non-stacked (grouped) bars, we need to calculate the position
+  // within the group
 
+  // Calculate the total width occupied by all columns in a group
   const totalColumnWidth = columnWidth.value * numberOfCols.value;
+
+  // Calculate the total gap width between and around columns in a group
   const totalGapWidth = barWidth.value - totalColumnWidth;
+
+  // Calculate the width of each gap between columns
   const gapBetweenColumns = totalGapWidth / (numberOfCols.value + 1);
 
+  // Calculate the x-position:
   return (
-    getXPosition(props.index) +
-    gapBetweenColumns * (props.outerIdx + 1) +
-    columnWidth.value * props.outerIdx
+    getXPosition(props.index) + // Start with the base x-position for this group
+    gapBetweenColumns * (props.outerIdx + 1) + // Add gaps before this column
+    columnWidth.value * props.outerIdx // Add width of previous columns
   );
+
+  /*
+    Visual representation of x-position calculation for non-stacked bars:
+
+    |  <-------------- barWidth ---------------->
+    |  |<-column->|   |<-column->|   |<-column->|
+    |  |          |   |          |   |          |
+    |  |          |   |          |   |          |
+    |__|__________|___|__________|___|__________|___
+       ^           ^   ^           ^
+       |           |   |           |
+       |           |   |           + (columnWidth * outerIdx)
+       |           |   |
+       |           |   + (gapBetweenColumns * (outerIdx + 1))
+       |           |
+       |           + (gapBetweenColumns)
+       |
+       + getXPosition(props.index)
+
+    */
 });
 
 const yPos = computed(() => {
   if (stacked) {
-    // SVG Y axis is inverted and starts from the top
-    // -------------------------- y = 0
-    // |    ______
-    // |    |    |  getYPosition
-    // |    |____|
-    // |    |    |
-    // |    |____|  getPreviousHeight
-    // |    |    |
+    /*
+     SVG Y axis is inverted and starts from the top
+     -------------------------- y = 0
+     |    ______
+     |    |    |  getYPosition
+     |    |____|
+     |    |    |
+     |    |____|  getPreviousHeight
+     |    |    |
+    */
     return (
       getYPosition(props.value) - getPreviousHeight(props.index, props.outerIdx)
     );
