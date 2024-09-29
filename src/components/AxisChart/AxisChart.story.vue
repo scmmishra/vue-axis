@@ -52,13 +52,29 @@ const dataset = [
 </script>
 
 <template>
-  <Story title="Axis Chart" :layout="{ type: 'grid', width: 900 }">
-    <AxisChart
-      :max-width="900"
-      :labels="labels"
-      :dataset="dataset"
-      :format-y="formatYAxis"
-      :format-x="formatXAxis"
-    />
+  <Story
+    title="Axis Chart"
+    :layout="{ type: 'grid', width: 900 }"
+    auto-props-disabled
+  >
+    <Variant title="Stacked">
+      <AxisChart
+        :max-width="900"
+        stacked
+        :labels="labels"
+        :dataset="dataset"
+        :format-y="formatYAxis"
+        :format-x="formatXAxis"
+      />
+    </Variant>
+    <Variant title="Unstacked">
+      <AxisChart
+        :max-width="900"
+        :labels="labels"
+        :dataset="dataset"
+        :format-y="formatYAxis"
+        :format-x="formatXAxis"
+      />
+    </Variant>
   </Story>
 </template>
