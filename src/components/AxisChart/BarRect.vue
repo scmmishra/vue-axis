@@ -38,24 +38,44 @@ const getPreviousHeight = (index, datasetIdx) => {
 
 const barHeight = computed(() => getHeight(props.value));
 const startY = computed(() => containerHeight.value - yOffset);
+
+const numberOfCols = computed(() => {
+  if (stacked) {
+    return 1;
+  }
+
+  return dataset.length;
+});
+
+const xPos = computed(() => {
+  if (stacked) {
+    return getXPosition(props.index);
+  }
+
+  const widthPerCol = barWidth.value / numberOfCols.value;
+  const offset = widthPerCol * props.outerIdx;
+  return getXPosition(props.index) + offset;
+});
+
 const yPos = computed(() => {
   if (stacked) {
     return (
       getYPosition(props.value) - getPreviousHeight(props.index, props.outerIdx)
     );
   }
+
   return getYPosition(props.value);
 });
 </script>
 
 <template>
   <rect
-    :x="getXPosition(index)"
+    :x="xPos"
     :y="disableAnimation ? yPos : startY"
     :data-idx="index"
     :data-value="value"
     :data-name="name"
-    :width="barWidth"
+    :width="barWidth / numberOfCols"
     :height="disableAnimation ? barHeight : 0"
     :fill="color"
   >

@@ -2,10 +2,12 @@
 import AxisChart from "./AxisChart.vue";
 import { generateNumbers, generateDates } from "utils/generator";
 
-const openConvCount = generateNumbers(15, 1, 100);
-const resolvedConvCount = generateNumbers(15, 1, 100);
-const archivedConvCount = generateNumbers(15, 1, 100);
-const labels = generateDates(15, "day");
+const dataCount = 15;
+
+const openConvCount = generateNumbers(dataCount, 1, 100);
+const resolvedConvCount = generateNumbers(dataCount, 1, 100);
+const archivedConvCount = generateNumbers(dataCount, 1, 100);
+const labels = generateDates(dataCount, "day");
 
 const colors = [
   "#c7d2fe",
@@ -53,9 +55,9 @@ const dataset = [
   <Story title="Axis Chart" :layout="{ type: 'grid', width: 900 }">
     <AxisChart
       :max-width="900"
+      disable-animation
       :labels="labels"
       :dataset="dataset"
-      stacked
       :format-y="formatYAxis"
       :format-x="formatXAxis"
     />
