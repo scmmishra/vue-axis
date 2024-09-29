@@ -6,20 +6,7 @@ const dataCount = 15;
 
 const openConvCount = generateNumbers(dataCount, 1, 100);
 const resolvedConvCount = generateNumbers(dataCount, 1, 100);
-const archivedConvCount = generateNumbers(dataCount, 1, 100);
 const labels = generateDates(dataCount, "day");
-
-const colors = [
-  "#c7d2fe",
-  "#a5b4fc",
-  "#818cf8",
-  "#6366f1",
-  "#4f46e5",
-  "#4338ca",
-  "#3730a3",
-  "#312e81",
-  "#1e1b4b",
-];
 
 const formatXAxis = (value) => {
   return new Date(value).getFullYear();
@@ -32,20 +19,14 @@ const formatYAxis = (value) => {
 const dataset = [
   {
     values: openConvCount,
-    color: colors[7],
+    color: "#064e3b",
     name: "Conversations open",
     type: "bar",
   },
   {
     values: resolvedConvCount,
-    color: colors[3],
+    color: "#4ade80",
     name: "Conversations resolved",
-    type: "bar",
-  },
-  {
-    values: archivedConvCount,
-    color: colors[0],
-    name: "Conversations archived",
     type: "bar",
   },
 ];
