@@ -93,7 +93,6 @@ watch(hoverIndex, (newIndex) => {
   }
 });
 
-// Provide values for inject
 provide("hoverIndex", hoverIndex);
 provide("getXPosition", getXPosition);
 provide("barWidth", barWidth);
@@ -175,8 +174,10 @@ provide("yOffset", props.yOffset);
           keySplines="0.215, 0.61, 0.355, 1"
         />
       </rect>
+    </g>
+    <g class="q-hover-triggers" style="opacity: 0">
       <rect
-        v-for="(value, index) in item.values"
+        v-for="(_, index) in labels"
         :x="getXPosition(index) - barGap / 2"
         :y="yOffset"
         :data-idx="index"
