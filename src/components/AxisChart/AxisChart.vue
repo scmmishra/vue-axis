@@ -1,6 +1,7 @@
 <script setup>
 import SVGText from "./SVGText.vue";
 import HoverRect from "./HoverRect.vue";
+import BarRect from "./BarRect.vue";
 
 import { ref, watch } from "vue";
 
@@ -72,7 +73,7 @@ const formatLabel = (label) => {
   return label;
 };
 
-const { ticks, maxEffectiveValue } = useDataset(props);
+const { maxValue, ticks, maxEffectiveValue } = useDataset(props);
 
 const {
   leftmargin,
@@ -95,25 +96,36 @@ watch(hoverIndex, (newIndex) => {
   }
 });
 
-const getPreviousHeight = (index, datasetIdx) => {
-  if (datasetIdx === 0) {
-    return 0;
-  }
-
-  const dataset = props.dataset[datasetIdx - 1];
-  const previousValue = dataset.values[index];
-
-  // count down to zero idx to capture the heights of all pervious datasets
-  return getHeight(previousValue) + getPreviousHeight(index, datasetIdx - 1);
-};
-
 provideAxisChart({
+  yOffset: props.yOffset,
+  xOffset: props.xOffset,
+  dataset: props.dataset,
+  animationDuration: props.animationDuration,
+  disableAnimation: props.disableAnimation,
+  stacked: props.stacked,
+
   hoverIndex,
   getXPosition,
   barWidth,
   barGap,
   containerHeight,
-  yOffset: props.yOffset,
+  getAnimationDelay,
+
+  // from useGeometry
+  leftmargin,
+  containerWidth,
+  containerHeight,
+  barWidth,
+  barGap,
+  getHeight,
+  getYPosition,
+  getXPosition,
+  drawWidth,
+
+  // from useDataset
+  maxValue,
+  ticks,
+  maxEffectiveValue,
 });
 </script>
 
@@ -158,40 +170,15 @@ provideAxisChart({
       :data-width="drawWidth"
       class="q-bars"
     >
-      <rect
+      <BarRect
         v-for="(value, index) in item.values"
-        :x="getXPosition(index)"
-        :y="containerHeight - props.yOffset"
-        :data-idx="index"
-        :data-value="value"
-        :data-name="item.name"
-        :width="barWidth"
-        :height="0"
-        :fill="item.color"
-      >
-        <animate
-          v-if="!disableAnimation"
-          attributeName="height"
-          :from="0"
-          :to="getHeight(value)"
-          :dur="`${props.animationDuration}ms`"
-          :begin="`${getAnimationDelay(index)}ms`"
-          fill="freeze"
-          calcMode="spline"
-          keySplines="0.215, 0.61, 0.355, 1"
-        />
-        <animate
-          v-if="!disableAnimation"
-          attributeName="y"
-          :from="containerHeight - props.yOffset"
-          :to="getYPosition(value) - getPreviousHeight(index, outerIdx)"
-          :dur="`${props.animationDuration}ms`"
-          :begin="`${getAnimationDelay(index)}ms`"
-          fill="freeze"
-          calcMode="spline"
-          keySplines="0.215, 0.61, 0.355, 1"
-        />
-      </rect>
+        :color="item.color"
+        :value="value"
+        :index="index"
+        :name="item.name"
+        :outerIdx="outerIdx"
+        :stacked="props.stacked"
+      />
     </g>
     <g class="q-hover-triggers" style="opacity: 0">
       <rect
