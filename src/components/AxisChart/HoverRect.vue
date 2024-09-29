@@ -1,12 +1,9 @@
 <script setup>
-import { computed, inject } from "vue";
+import { computed } from "vue";
+import { useAxisChart } from "composables/AxisChart/provider";
 
-const hoverIndex = inject("hoverIndex");
-const getXPosition = inject("getXPosition");
-const barWidth = inject("barWidth");
-const barGap = inject("barGap");
-const yOffset = inject("yOffset");
-const containerHeight = inject("containerHeight");
+const { hoverIndex, getXPosition, barWidth, barGap, yOffset, containerHeight } =
+  useAxisChart();
 
 const isHovering = computed(() => hoverIndex.value !== null);
 const hoverRectX = computed(() =>

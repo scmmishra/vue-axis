@@ -1,15 +1,19 @@
 <script setup>
 import SVGText from "./SVGText.vue";
 import HoverRect from "./HoverRect.vue";
-import { computed, ref, watch, provide } from "vue";
-import useGeometry from "./useGeometry";
-import useNiceNumbers from "./useNiceNumbers";
+
+import { computed, ref, watch } from "vue";
+
+import { provideAxisChart } from "composables/AxisChart/provider";
+import useGeometry from "composables/AxisChart/useGeometry";
+import useNiceNumbers from "composables/useNiceNumbers";
 
 /**
  * @typedef {Object} DatasetItem
  * @property {number[]} values - Array of numerical values
  * @property {string} name - Name of the dataset
  * @property {string} color - Color of the dataset
+ * @property {'bar' | 'line'} type - Type of the dataset
  */
 
 /**
@@ -21,6 +25,7 @@ import useNiceNumbers from "./useNiceNumbers";
  *   spaceRatio?: number,
  *   xOffset?: number,
  *   yOffset?: number,
+ *   stacked?: boolean,
  *   disableAnimation?: boolean,
  *   animationDuration?: number
  * }>}
@@ -28,6 +33,7 @@ import useNiceNumbers from "./useNiceNumbers";
 const props = defineProps({
   labels: { type: Array, required: true },
   dataset: { type: Array, required: true },
+  stacked: { type: Boolean, default: false },
   height: { type: Number, default: null },
   maxWidth: { type: Number, default: 800 },
   spaceRatio: { type: Number, default: 0.2 },
@@ -93,12 +99,14 @@ watch(hoverIndex, (newIndex) => {
   }
 });
 
-provide("hoverIndex", hoverIndex);
-provide("getXPosition", getXPosition);
-provide("barWidth", barWidth);
-provide("barGap", barGap);
-provide("containerHeight", containerHeight);
-provide("yOffset", props.yOffset);
+provideAxisChart({
+  hoverIndex,
+  getXPosition,
+  barWidth,
+  barGap,
+  containerHeight,
+  yOffset: props.yOffset,
+});
 </script>
 
 <template>

@@ -2,8 +2,9 @@
 import AxisChart from "./AxisChart.vue";
 import { generateNumbers, generateDates } from "utils/generator";
 
-const data = generateNumbers(15, 1, 100);
-const labels = generateDates(15, "year");
+const openConvCount = generateNumbers(15, 1, 100);
+const resolvedConvCount = generateNumbers(15, 1, 100);
+const labels = generateDates(15, "day");
 
 const formatXAxis = (value) => {
   return new Date(value).getFullYear();
@@ -15,9 +16,16 @@ const formatYAxis = (value) => {
 
 const dataset = [
   {
-    values: data,
+    values: openConvCount,
     color: "#2dd4bf",
-    name: "Inflation Rate (%)",
+    name: "Conversations open",
+    type: "bar",
+  },
+  {
+    values: resolvedConvCount,
+    color: "#2dd4bf",
+    name: "Conversations resolved",
+    type: "bar",
   },
 ];
 </script>
