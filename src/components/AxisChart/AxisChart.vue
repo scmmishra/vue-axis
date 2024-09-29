@@ -103,6 +103,7 @@ provideAxisChart({
   animationDuration: props.animationDuration,
   disableAnimation: props.disableAnimation,
   stacked: props.stacked,
+  spaceRatio: props.spaceRatio,
 
   hoverIndex,
   getXPosition,

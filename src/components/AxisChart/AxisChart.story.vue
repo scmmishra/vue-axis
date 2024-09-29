@@ -55,7 +55,6 @@ const dataset = [
   <Story title="Axis Chart" :layout="{ type: 'grid', width: 900 }">
     <AxisChart
       :max-width="900"
-      disable-animation
       :labels="labels"
       :dataset="dataset"
       :format-y="formatYAxis"

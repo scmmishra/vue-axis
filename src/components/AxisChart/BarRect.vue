@@ -22,6 +22,7 @@ const {
   dataset,
   stacked,
   disableAnimation,
+  spaceRatio,
 } = useAxisChart();
 
 const getPreviousHeight = (index, datasetIdx) => {
@@ -43,8 +44,14 @@ const numberOfCols = computed(() => {
   if (stacked) {
     return 1;
   }
-
   return dataset.length;
+});
+
+const columnWidth = computed(() => {
+  if (stacked) {
+    return barWidth.value;
+  }
+  return (barWidth.value * (1 - spaceRatio)) / numberOfCols.value;
 });
 
 const xPos = computed(() => {
@@ -52,9 +59,15 @@ const xPos = computed(() => {
     return getXPosition(props.index);
   }
 
-  const widthPerCol = barWidth.value / numberOfCols.value;
-  const offset = widthPerCol * props.outerIdx;
-  return getXPosition(props.index) + offset;
+  const totalColumnWidth = columnWidth.value * numberOfCols.value;
+  const totalGapWidth = barWidth.value - totalColumnWidth;
+  const gapBetweenColumns = totalGapWidth / (numberOfCols.value + 1);
+
+  return (
+    getXPosition(props.index) +
+    gapBetweenColumns * (props.outerIdx + 1) +
+    columnWidth.value * props.outerIdx
+  );
 });
 
 const yPos = computed(() => {
@@ -75,7 +88,7 @@ const yPos = computed(() => {
     :data-idx="index"
     :data-value="value"
     :data-name="name"
-    :width="barWidth / numberOfCols"
+    :width="columnWidth"
     :height="disableAnimation ? barHeight : 0"
     :fill="color"
   >
