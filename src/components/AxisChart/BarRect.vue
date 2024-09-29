@@ -3,6 +3,18 @@ import { computed } from "vue";
 import AnimateSVG from "./AnimateSVG.vue";
 import { useAxisChart } from "composables/AxisChart/provider";
 
+/**
+ * @typedef {Object} BarProps
+ * @property {number} value - The value represented by the bar
+ * @property {string} name - The name or label of the bar
+ * @property {number} outerIdx - The outer index for grouped or stacked bars
+ * @property {number} index - The index of the bar within its group
+ * @property {string} color - The color of the bar
+ */
+
+/**
+ * @type {import('vue').PropType<BarProps>}
+ */
 const props = defineProps({
   value: { type: Number, required: true },
   name: { type: String, required: true },
@@ -72,6 +84,14 @@ const xPos = computed(() => {
 
 const yPos = computed(() => {
   if (stacked) {
+    // SVG Y axis is inverted and starts from the top
+    // -------------------------- y = 0
+    // |    ______
+    // |    |    |  getYPosition
+    // |    |____|
+    // |    |    |
+    // |    |____|  getPreviousHeight
+    // |    |    |
     return (
       getYPosition(props.value) - getPreviousHeight(props.index, props.outerIdx)
     );
