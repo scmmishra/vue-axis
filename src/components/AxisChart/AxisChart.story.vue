@@ -4,6 +4,7 @@ import { generateNumbers, generateDates } from "utils/generator";
 
 const openConvCount = generateNumbers(15, 1, 100);
 const resolvedConvCount = generateNumbers(15, 1, 100);
+const archivedConvCount = generateNumbers(15, 1, 100);
 const labels = generateDates(15, "day");
 
 const colors = [
@@ -37,6 +38,12 @@ const dataset = [
     values: resolvedConvCount,
     color: colors[3],
     name: "Conversations resolved",
+    type: "bar",
+  },
+  {
+    values: archivedConvCount,
+    color: colors[0],
+    name: "Conversations archived",
     type: "bar",
   },
 ];

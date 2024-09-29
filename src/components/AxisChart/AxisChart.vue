@@ -95,6 +95,18 @@ watch(hoverIndex, (newIndex) => {
   }
 });
 
+const getPreviousHeight = (index, datasetIdx) => {
+  if (datasetIdx === 0) {
+    return 0;
+  }
+
+  const dataset = props.dataset[datasetIdx - 1];
+  const previousValue = dataset.values[index];
+
+  // count down to zero idx to capture the heights of all pervious datasets
+  return getHeight(previousValue) + getPreviousHeight(index, datasetIdx - 1);
+};
+
 provideAxisChart({
   hoverIndex,
   getXPosition,
@@ -141,7 +153,7 @@ provideAxisChart({
       />
     </g>
     <g
-      v-for="item in dataset"
+      v-for="(item, outerIdx) in dataset"
       :data-q-name="item.name"
       :data-width="drawWidth"
       class="q-bars"
@@ -151,6 +163,8 @@ provideAxisChart({
         :x="getXPosition(index)"
         :y="containerHeight - props.yOffset"
         :data-idx="index"
+        :data-value="value"
+        :data-name="item.name"
         :width="barWidth"
         :height="0"
         :fill="item.color"
@@ -170,7 +184,7 @@ provideAxisChart({
           v-if="!disableAnimation"
           attributeName="y"
           :from="containerHeight - props.yOffset"
-          :to="getYPosition(value)"
+          :to="getYPosition(value) - getPreviousHeight(index, outerIdx)"
           :dur="`${props.animationDuration}ms`"
           :begin="`${getAnimationDelay(index)}ms`"
           fill="freeze"
