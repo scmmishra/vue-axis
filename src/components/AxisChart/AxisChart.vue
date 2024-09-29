@@ -2,11 +2,11 @@
 import SVGText from "./SVGText.vue";
 import HoverRect from "./HoverRect.vue";
 
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 import { provideAxisChart } from "composables/AxisChart/provider";
 import useGeometry from "composables/AxisChart/useGeometry";
-import useNiceNumbers from "composables/useNiceNumbers";
+import useDataset from "composables/AxisChart/useDataset";
 
 /**
  * @typedef {Object} DatasetItem
@@ -49,12 +49,6 @@ const hoverIndex = ref(null);
 const hoverRectX = ref(0);
 const isHovering = ref(false);
 
-const maxValue = computed(() => {
-  return Math.max(...props.dataset.map((item) => Math.max(...item.values)));
-});
-const ticks = computed(() => useNiceNumbers(0, maxValue.value));
-const maxEffectiveValue = computed(() => ticks.value[ticks.value.length - 1]);
-
 const getAnimationDelay = (index) => index * 2;
 const isDate = (obj) => Object.prototype.toString.call(obj) === "[object Date]";
 
@@ -77,6 +71,8 @@ const formatLabel = (label) => {
 
   return label;
 };
+
+const { ticks, maxEffectiveValue } = useDataset(props);
 
 const {
   leftmargin,
