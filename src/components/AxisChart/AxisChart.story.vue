@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import AxisChart from "./AxisChart.vue";
 import { generateNumbers, generateDates } from "utils/generator";
 

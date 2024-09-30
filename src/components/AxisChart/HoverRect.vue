@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { computed } from "vue";
 import { useAxisChart } from "composables/AxisChart/provider";
 

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import SVGText from "./SVGText.vue";
 import HoverRect from "./HoverRect.vue";
 import BarRect from "./BarRect.vue";

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { useAxisChart } from "composables/AxisChart/provider";
 
 defineProps({

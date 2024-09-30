@@ -1,15 +1,24 @@
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, watch, onMounted, computed, Ref } from "vue";
 import { useElementBounding, useParentElement } from "@vueuse/core";
 
 const leftmargin = 50;
 
-export default function useGeometry(props, maxValue) {
+interface Props {
+  maxWidth: number;
+  height?: number;
+  yOffset: number;
+  xOffset: number;
+  labels: any[];
+  spaceRatio: number;
+}
+
+export default function useGeometry(props: Props, maxValue: Ref<number>) {
   const parent = useParentElement();
   const { width: parentWidth, height: parentHeight } =
     useElementBounding(parent);
 
-  const containerWidth = ref(0);
-  const containerHeight = ref(0);
+  const containerWidth = ref<number>(0);
+  const containerHeight = ref<number>(0);
 
   const computeGeometry = () => {
     containerWidth.value = Math.max(
@@ -70,15 +79,15 @@ export default function useGeometry(props, maxValue) {
    |________________|_________|
    */
 
-  function getHeight(value) {
+  function getHeight(value: number): number {
     return value * yScale.value;
   }
 
-  function getYPosition(value) {
+  function getYPosition(value: number): number {
     return containerHeight.value - getHeight(value) - props.yOffset;
   }
 
-  function getXPosition(index) {
+  function getXPosition(index: number): number {
     if (index === 0) {
       // shift this by barGap / 2 to align the gap halfway on each side of the bar
       return leftmargin + props.xOffset + barGap.value / 2;
