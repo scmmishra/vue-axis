@@ -1,1 +1,3 @@
-export { AxisChart } from "components/AxisChart/AxisChart.vue";
+import AxisChart from "./components/AxisChart/AxisChart.vue";
+
+export { AxisChart };
