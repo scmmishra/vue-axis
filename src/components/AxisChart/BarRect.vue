@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import AnimateSVG from "./AnimateSVG.vue";
-import { useAxisChart } from "../../composables/AxisChart/provider";
+import { useAxisChart } from "@composables/AxisChart/provider";
 
 const props = defineProps({
   value: { type: Number, required: true },

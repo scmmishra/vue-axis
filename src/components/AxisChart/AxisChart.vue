@@ -5,9 +5,9 @@ import BarRect from "./BarRect.vue";
 
 import { ref, watch } from "vue";
 
-import { provideAxisChart } from "composables/AxisChart/provider";
-import useGeometry from "composables/AxisChart/useGeometry";
-import useDataset from "composables/AxisChart/useDataset";
+import { provideAxisChart } from "@composables/AxisChart/provider";
+import useGeometry from "@composables/AxisChart/useGeometry";
+import useDataset from "@composables/AxisChart/useDataset";
 
 /**
  * @typedef {Object} DatasetItem
