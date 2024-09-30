@@ -5,9 +5,9 @@ import BarRect from "./BarRect.vue";
 
 import { ref, watch } from "vue";
 
-import { provideAxisChart } from "@composables/AxisChart/provider";
-import useGeometry from "@composables/AxisChart/useGeometry";
-import useDataset from "@composables/AxisChart/useDataset";
+import { provideAxisChart } from "../../composables/AxisChart/provider";
+import useGeometry from "../../composables/AxisChart/useGeometry";
+import useDataset from "../../composables/AxisChart/useDataset";
 
 export type DatasetItem = {
   values: number[];
@@ -27,8 +27,8 @@ export interface Props {
   yOffset?: number;
   disableAnimation?: boolean;
   animationDuration?: number;
-  formatX?: (label: string | number | Date) => string;
-  formatY?: (tick: number) => string;
+  formatX?: (label: string | number | Date) => number | string;
+  formatY?: (tick: number) => number | string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -124,7 +124,7 @@ provideAxisChart({
 
 <template>
   <svg :width="containerWidth" :height="containerHeight">
-    <HoverRect />
+    <HoverRect v-if="isHovering" />
     <g class="va-y-ticks">
       <SVGText
         v-for="value in ticks"

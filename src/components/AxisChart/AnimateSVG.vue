@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useAxisChart } from "@composables/AxisChart/provider";
+import { useAxisChart } from "../../composables/AxisChart/provider";
 
 defineProps({
   delay: {

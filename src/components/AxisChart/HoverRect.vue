@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-import { useAxisChart } from "@composables/AxisChart/provider";
+import { useAxisChart } from "../../composables/AxisChart/provider";
 
 const { hoverIndex, getXPosition, barWidth, barGap, yOffset, containerHeight } =
   useAxisChart();
