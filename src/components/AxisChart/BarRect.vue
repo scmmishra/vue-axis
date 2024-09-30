@@ -25,7 +25,7 @@ const {
   spaceRatio,
 } = useAxisChart();
 
-const getPreviousHeight = (index, datasetIdx) => {
+function getPreviousHeight(index: number, datasetIdx: number): number {
   if (datasetIdx === 0) {
     return 0;
   }
@@ -35,7 +35,7 @@ const getPreviousHeight = (index, datasetIdx) => {
 
   // count down to zero idx to capture the heights of all pervious datasets
   return getHeight(previousValue) + getPreviousHeight(index, datasetIdx - 1);
-};
+}
 
 const barHeight = computed(() => getHeight(props.value));
 const startY = computed(() => containerHeight.value - yOffset);
