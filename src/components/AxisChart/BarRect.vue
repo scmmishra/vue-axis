@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import AnimateSVG from "./AnimateSVG.vue";
 import { useAxisChart } from "../../composables/AxisChart/provider";
 
@@ -9,7 +9,16 @@ const props = defineProps({
   outerIdx: { type: Number, required: true },
   index: { type: Number, required: true },
   color: { type: String, required: true },
+  stacked: { type: Boolean, required: true },
 });
+
+const renderKey = ref(0);
+watch(
+  () => [props.value, props.outerIdx, props.index, props.stacked],
+  () => {
+    renderKey.value++; // Increment the key to force re-render
+  },
+);
 
 const {
   getXPosition,
@@ -20,8 +29,6 @@ const {
   getHeight,
   getAnimationDelay,
   dataset,
-  stacked,
-  disableAnimation,
   spaceRatio,
 } = useAxisChart();
 
@@ -41,21 +48,21 @@ const barHeight = computed(() => getHeight(props.value));
 const startY = computed(() => containerHeight.value - yOffset);
 
 const numberOfCols = computed(() => {
-  if (stacked) {
+  if (props.stacked) {
     return 1;
   }
   return dataset.length;
 });
 
 const columnWidth = computed(() => {
-  if (stacked) {
+  if (props.stacked) {
     return barWidth.value;
   }
   return (barWidth.value * (1 - spaceRatio)) / numberOfCols.value;
 });
 
 const xPos = computed(() => {
-  if (stacked) {
+  if (props.stacked) {
     // For stacked bars, all bars in a stack share the same x-position
     // Just return the x-position for this index
     return getXPosition(props.index);
@@ -101,7 +108,7 @@ const xPos = computed(() => {
 });
 
 const yPos = computed(() => {
-  if (stacked) {
+  if (props.stacked) {
     /*
      SVG Y axis is inverted and starts from the top
      -------------------------- y = 0
@@ -123,13 +130,14 @@ const yPos = computed(() => {
 
 <template>
   <rect
+    :key="renderKey"
     :x="xPos"
-    :y="disableAnimation ? yPos : startY"
+    :y="yPos"
     :data-idx="index"
     :data-value="value"
     :data-name="name"
     :width="columnWidth"
-    :height="disableAnimation ? barHeight : 0"
+    :height="barHeight"
     :fill="color"
   >
     <AnimateSVG
