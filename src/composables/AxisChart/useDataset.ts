@@ -27,27 +27,20 @@ function mergeArrays(arrays: number[][]): number[] {
   return merged;
 }
 
-export default function useDataset(
-  dataset: DatasetItem[],
-  stacked: ComputedRef<boolean>,
-) {
-  const getMaxValue = (
-    dataset: DatasetItem[],
-    stacked: ComputedRef<boolean>,
-  ): number => {
-    if (stacked.value) {
+export default function useDataset(props: Props) {
+  const getMaxValue = (dataset: DatasetItem[], stacked: boolean): number => {
+    if (stacked) {
       const values = dataset.map((item) => item.values);
       const merged = mergeArrays(values);
       return Math.max(...merged);
     }
 
-    return Math.max(...dataset.map((item) => Math.max(...item.values)));
+    return Math.max(...props.dataset.map((item) => Math.max(...item.values)));
   };
 
-  const maxValue: ComputedRef<number> = computed(() => {
-    console.log("maxValue computed");
-    return getMaxValue(dataset, stacked);
-  });
+  const maxValue: ComputedRef<number> = computed(() =>
+    getMaxValue(props.dataset, props.stacked),
+  );
   const ticks: ComputedRef<number[]> = computed(() =>
     useNiceNumbers(0, maxValue.value),
   );

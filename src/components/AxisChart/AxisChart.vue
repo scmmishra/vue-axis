@@ -3,7 +3,7 @@ import SVGText from "./SVGText.vue";
 import HoverRect from "./HoverRect.vue";
 import BarRect from "./BarRect.vue";
 
-import { ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 
 import { provideAxisChart } from "../../composables/AxisChart/provider";
 import useGeometry from "../../composables/AxisChart/useGeometry";
@@ -41,8 +41,6 @@ const props = withDefaults(defineProps<Props>(), {
   animationDuration: 100,
 });
 
-const stacked = computed(() => props.stacked);
-
 const hoverIndex = ref(-1);
 const hoverRectX = ref(0);
 const isHovering = ref(false);
@@ -71,10 +69,7 @@ const formatLabel = (label: string | number | Date) => {
   return label;
 };
 
-const { maxValue, ticks, maxEffectiveValue } = useDataset(
-  props.dataset,
-  stacked,
-);
+const { maxValue, ticks, maxEffectiveValue } = useDataset(props);
 
 const {
   leftmargin,
@@ -103,7 +98,7 @@ provideAxisChart({
   dataset: props.dataset,
   animationDuration: props.animationDuration,
   disableAnimation: props.disableAnimation,
-  stacked: stacked,
+  stacked: props.stacked,
   spaceRatio: props.spaceRatio,
 
   hoverIndex,
@@ -175,7 +170,7 @@ provideAxisChart({
         :index="index"
         :name="item.name"
         :outerIdx="outerIdx"
-        :stacked="stacked"
+        :stacked="props.stacked"
       />
     </g>
     <g class="va-hover-triggers" style="opacity: 0">
