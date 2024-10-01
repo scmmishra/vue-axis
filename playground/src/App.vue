@@ -18,6 +18,9 @@ const formatYAxis = (value: number) => {
 };
 
 const stacked = ref(true);
+const spaceRatio = ref(0.2);
+const xOffset = ref(20);
+const yOffset = ref(20);
 
 const dataset = [
   {
@@ -38,15 +41,16 @@ const dataset = [
 <template>
   <section class="max-w-5xl mx-auto py-12">
     <h2 class="text-2xl font-bold mb-5">Stacked Bar Chart</h2>
-    <div>
-      <span class="text-gray-600">Controls</span>
-      <div>
-        <label>
-          <input type="checkbox" v-model="stacked" />
 
-          Stacked
-        </label>
-      </div>
+    <div class="grid gap-2 max-w-sm">
+      <label>
+        <input type="checkbox" v-model="stacked" />
+        Stacked
+      </label>
+      <label class="grid">
+        Space Ratio
+        <input type="range" min="0" max="1" step="0.1" v-model="spaceRatio" />
+      </label>
     </div>
     <div
       class="p-5 shadow-sm outline outline-1 outline-gray-200 rounded-md mx-auto mt-5"
@@ -56,8 +60,11 @@ const dataset = [
           :max-width="1300"
           :height="400"
           :stacked="stacked"
+          :spaceRatio="Number(spaceRatio)"
           :labels="labels"
           :dataset="dataset"
+          :xOffset="xOffset"
+          :yOffset="yOffset"
           :format-y="formatYAxis"
           :format-x="formatXAxis"
         />
