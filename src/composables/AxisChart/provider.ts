@@ -11,7 +11,7 @@ export interface AxisChartPayload {
   }[];
   animationDuration: number;
   disableAnimation: boolean;
-  stacked: boolean;
+  stacked: ComputedRef<boolean>;
   spaceRatio: number;
   hoverIndex: Ref<number>;
   getAnimationDelay: (index: number) => number;

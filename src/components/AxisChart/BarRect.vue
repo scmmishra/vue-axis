@@ -41,21 +41,21 @@ const barHeight = computed(() => getHeight(props.value));
 const startY = computed(() => containerHeight.value - yOffset);
 
 const numberOfCols = computed(() => {
-  if (stacked) {
+  if (stacked.value) {
     return 1;
   }
   return dataset.length;
 });
 
 const columnWidth = computed(() => {
-  if (stacked) {
+  if (stacked.value) {
     return barWidth.value;
   }
   return (barWidth.value * (1 - spaceRatio)) / numberOfCols.value;
 });
 
 const xPos = computed(() => {
-  if (stacked) {
+  if (stacked.value) {
     // For stacked bars, all bars in a stack share the same x-position
     // Just return the x-position for this index
     return getXPosition(props.index);
@@ -101,7 +101,7 @@ const xPos = computed(() => {
 });
 
 const yPos = computed(() => {
-  if (stacked) {
+  if (stacked.value) {
     /*
      SVG Y axis is inverted and starts from the top
      -------------------------- y = 0
