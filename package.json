@@ -2,10 +2,24 @@
   "name": "@scmmishra/vue-axis",
   "version": "0.0.1",
   "type": "module",
+  "description": "SVG charts using Vanilla VueJS",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    }
+  },
   "scripts": {
     "prepack": "unbuild",
     "release": "changelogen --release && npm publish --access public && git push --follow-tags"
   },
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "tsconfig.json"
+  ],
   "dependencies": {
     "@vueuse/core": "^11.1.0",
     "vue": "^3.5.9"
