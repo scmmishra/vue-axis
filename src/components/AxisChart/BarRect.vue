@@ -40,7 +40,7 @@ function getPreviousHeight(index: number, datasetIdx: number): number {
     return 0;
   }
 
-  const prevValues = dataset[datasetIdx - 1];
+  const prevValues = dataset.value[datasetIdx - 1];
   const previousValue = prevValues.values[index];
 
   // count down to zero idx to capture the heights of all pervious datasets
@@ -54,7 +54,7 @@ const numberOfCols = computed(() => {
   if (props.stacked) {
     return 1;
   }
-  return dataset.length;
+  return dataset.value.length;
 });
 
 const columnWidth = computed(() => {

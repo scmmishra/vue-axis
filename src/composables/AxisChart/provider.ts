@@ -4,11 +4,14 @@ import type { InjectionKey, Ref, ComputedRef } from "vue";
 export interface AxisChartPayload {
   yOffset: number;
   xOffset: number;
-  dataset: {
-    values: number[];
-    name: string;
-    color: string;
-  }[];
+  dataset: ComputedRef<
+    {
+      values: number[];
+      name: string;
+      type: "bar" | "line";
+      color: string;
+    }[]
+  >;
   animationDuration: number;
   disableAnimation: boolean;
   stacked: boolean;

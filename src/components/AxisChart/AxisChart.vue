@@ -13,7 +13,7 @@ export type DatasetItem = {
   values: number[];
   name: string;
   color: string;
-  type: "bar" | "line";
+  type?: "bar" | "line";
 };
 
 export interface Props {
@@ -69,7 +69,8 @@ const formatLabel = (label: string | number | Date) => {
   return label;
 };
 
-const { maxValue, ticks, maxEffectiveValue } = useDataset(props);
+const { maxValue, ticks, maxEffectiveValue, cleanedDataset } =
+  useDataset(props);
 
 const {
   leftmargin,
@@ -95,11 +96,11 @@ watch(hoverIndex, (newIndex) => {
 provideAxisChart({
   yOffset: props.yOffset,
   xOffset: props.xOffset,
-  dataset: props.dataset,
   animationDuration: props.animationDuration,
   disableAnimation: props.disableAnimation,
   stacked: props.stacked,
   spaceRatio: props.spaceRatio,
+  dataset: cleanedDataset,
 
   hoverIndex,
   getAnimationDelay,
@@ -158,7 +159,7 @@ provideAxisChart({
       />
     </g>
     <g
-      v-for="(item, outerIdx) in dataset"
+      v-for="(item, outerIdx) in cleanedDataset"
       :data-va-name="item.name"
       :data-width="drawWidth"
       class="va-bars"
@@ -173,7 +174,7 @@ provideAxisChart({
         :stacked="props.stacked"
       />
     </g>
-    <g class="va-hover-triggers" style="opacity: 0">
+    <!-- <g class="va-hover-triggers" style="opacity: 0">
       <rect
         v-for="(_, index) in labels"
         :x="getXPosition(index) - barGap / 2"
@@ -185,6 +186,6 @@ provideAxisChart({
         @mouseover="() => (hoverIndex = index)"
         @mouseleave="() => (hoverIndex = -1)"
       />
-    </g>
+    </g> -->
   </svg>
 </template>

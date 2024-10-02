@@ -31,6 +31,7 @@ export default function useGeometry(props: Props, maxValue: Ref<number>) {
 
   watch(() => props.maxWidth, computeGeometry);
   watch(() => props.height, computeGeometry);
+  watch(() => props.labels, computeGeometry);
 
   const yScale = computed(() => {
     return (containerHeight.value - 2 * props.yOffset) / maxValue.value;

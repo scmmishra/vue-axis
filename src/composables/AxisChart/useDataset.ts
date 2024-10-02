@@ -2,9 +2,12 @@ import { computed, ComputedRef } from "vue";
 
 import useNiceNumbers from "../useNiceNumbers";
 
-interface DatasetItem {
+export type DatasetItem = {
   values: number[];
-}
+  name: string;
+  color: string;
+  type?: "bar" | "line";
+};
 
 interface Props {
   dataset: DatasetItem[];
@@ -48,9 +51,19 @@ export default function useDataset(props: Props) {
     () => ticks.value[ticks.value.length - 1],
   );
 
+  const cleanedDataset = computed(() => {
+    return props.dataset.map((item) => {
+      return {
+        ...item,
+        type: item.type || "bar",
+      };
+    });
+  });
+
   return {
     maxValue,
     ticks,
     maxEffectiveValue,
+    cleanedDataset,
   };
 }
