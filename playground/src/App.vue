@@ -13,10 +13,11 @@ const openConvCount = computed(() => generateNumbers(dataCount.value, 1, 100));
 const resolvedConvCount = computed(() =>
   generateNumbers(dataCount.value, 1, 100),
 );
-const labels = computed(() => generateDates(dataCount.value, "day"));
+const labels = computed(() => generateDates(dataCount.value, "day").reverse());
 
 const formatXAxis = (value: string | number | Date) => {
-  return new Date(value).getFullYear();
+  const date = new Date(value);
+  return `${date.getDate()}/${date.getMonth() + 1}`;
 };
 
 const formatYAxis = (value: number) => {
@@ -40,7 +41,6 @@ const dataset = computed(() => [
 </script>
 
 <template>
-  {{ dataset }}
   <section class="max-w-5xl mx-auto py-12">
     <h2 class="text-2xl font-bold mb-5">Stacked Bar Chart</h2>
 
