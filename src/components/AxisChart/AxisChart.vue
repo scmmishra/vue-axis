@@ -174,7 +174,7 @@ provideAxisChart({
         :stacked="props.stacked"
       />
     </g>
-    <!-- <g class="va-hover-triggers" style="opacity: 0">
+    <g class="va-hover-triggers" style="opacity: 0">
       <rect
         v-for="(_, index) in labels"
         :x="getXPosition(index) - barGap / 2"
@@ -186,6 +186,6 @@ provideAxisChart({
         @mouseover="() => (hoverIndex = index)"
         @mouseleave="() => (hoverIndex = -1)"
       />
-    </g> -->
+    </g>
   </svg>
 </template>
