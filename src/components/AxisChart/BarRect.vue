@@ -16,6 +16,9 @@ const renderKey = ref(0);
 watch(
   () => [props.value, props.outerIdx, props.index, props.stacked],
   () => {
+    // [TODO] Find a better way to figure this out
+    // Remove this and see, the bar rects when toggled between stacked and grouped
+    // doesn't render correctly if animations are present
     renderKey.value++; // Increment the key to force re-render
   },
 );
