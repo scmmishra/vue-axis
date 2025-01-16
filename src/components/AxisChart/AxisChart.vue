@@ -1,34 +1,34 @@
 <script lang="ts" setup>
-import SVGText from "./SVGText.vue";
-import HoverRect from "./HoverRect.vue";
-import BarRect from "./BarRect.vue";
+import { ref, watch } from 'vue'
+import { provideAxisChart } from '../../composables/AxisChart/provider'
+import useDataset from '../../composables/AxisChart/useDataset'
 
-import { ref, watch } from "vue";
+import useGeometry from '../../composables/AxisChart/useGeometry'
 
-import { provideAxisChart } from "../../composables/AxisChart/provider";
-import useGeometry from "../../composables/AxisChart/useGeometry";
-import useDataset from "../../composables/AxisChart/useDataset";
+import BarRect from './BarRect.vue'
+import HoverRect from './HoverRect.vue'
+import SVGText from './SVGText.vue'
 
-export type DatasetItem = {
-  values: number[];
-  name: string;
-  color: string;
-  type?: "bar" | "line";
-};
+export interface DatasetItem {
+  values: number[]
+  name: string
+  color: string
+  type?: 'bar' | 'line'
+}
 
 export interface Props {
-  labels: Array<string | number | Date>;
-  dataset: { values: number[]; name: string; color: string }[];
-  stacked?: boolean;
-  height?: number;
-  maxWidth?: number;
-  spaceRatio?: number;
-  xOffset?: number;
-  yOffset?: number;
-  disableAnimation?: boolean;
-  animationDuration?: number;
-  formatX?: (label: string | number | Date) => number | string;
-  formatY?: (tick: number) => number | string;
+  labels: Array<string | number | Date>
+  dataset: { values: number[], name: string, color: string }[]
+  stacked?: boolean
+  height?: number
+  maxWidth?: number
+  spaceRatio?: number
+  xOffset?: number
+  yOffset?: number
+  disableAnimation?: boolean
+  animationDuration?: number
+  formatX?: (label: string | number | Date) => number | string
+  formatY?: (tick: number) => number | string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -39,38 +39,39 @@ const props = withDefaults(defineProps<Props>(), {
   maxWidth: 800,
   disableAnimation: false,
   animationDuration: 100,
-});
+})
 
-const hoverIndex = ref(-1);
-const hoverRectX = ref(0);
-const isHovering = ref(false);
+const hoverIndex = ref(-1)
+const hoverRectX = ref(0)
+const isHovering = ref(false)
 
-const getAnimationDelay = (index: number) => index * 2;
-const isDate = (obj: string | number | Date) =>
-  Object.prototype.toString.call(obj) === "[object Date]";
+const getAnimationDelay = (index: number) => index * 2
+function isDate(obj: string | number | Date) {
+  return Object.prototype.toString.call(obj) === '[object Date]'
+}
 
-const formatTick = (tick: number) => {
+function formatTick(tick: number) {
   if (props.formatY) {
-    return props.formatY(tick);
+    return props.formatY(tick)
   }
 
-  return tick;
-};
+  return tick
+}
 
-const formatLabel = (label: string | number | Date) => {
+function formatLabel(label: string | number | Date) {
   if (isDate(label) && !props.formatX) {
-    return (label as Date).toLocaleDateString();
+    return (label as Date).toLocaleDateString()
   }
 
   if (props.formatX) {
-    return props.formatX(label);
+    return props.formatX(label)
   }
 
-  return label;
-};
+  return label
+}
 
-const { maxValue, ticks, maxEffectiveValue, cleanedDataset } =
-  useDataset(props);
+const { maxValue, ticks, maxEffectiveValue, cleanedDataset }
+  = useDataset(props)
 
 const {
   leftmargin,
@@ -82,16 +83,17 @@ const {
   getYPosition,
   getXPosition,
   drawWidth,
-} = useGeometry(props, maxEffectiveValue);
+} = useGeometry(props, maxEffectiveValue)
 
 watch(hoverIndex, (newIndex) => {
   if (newIndex !== -1) {
-    hoverRectX.value = getXPosition(newIndex) - barGap.value / 2;
-    isHovering.value = true;
-  } else {
-    isHovering.value = false;
+    hoverRectX.value = getXPosition(newIndex) - barGap.value / 2
+    isHovering.value = true
   }
-});
+  else {
+    isHovering.value = false
+  }
+})
 
 provideAxisChart({
   yOffset: props.yOffset,
@@ -120,7 +122,7 @@ provideAxisChart({
   maxValue,
   ticks,
   maxEffectiveValue,
-});
+})
 </script>
 
 <template>
@@ -128,7 +130,8 @@ provideAxisChart({
     <HoverRect v-if="isHovering" />
     <g class="va-y-ticks">
       <SVGText
-        v-for="value in ticks"
+        v-for="(value, index) in ticks"
+        :key="`tick-${value}-${index}`"
         :x="leftmargin - 10"
         :y="getYPosition(value) + 3"
         text-anchor="end"
@@ -139,6 +142,7 @@ provideAxisChart({
     <g class="va-x-ticks">
       <SVGText
         v-for="(label, index) in labels"
+        :key="`${label}-${index}`"
         :x="getXPosition(index) + barWidth / 2"
         :y="containerHeight"
         :width="barWidth"
@@ -149,7 +153,8 @@ provideAxisChart({
     </g>
     <g class="va-axis-lines">
       <line
-        v-for="value in ticks"
+        v-for="(value, index) in ticks"
+        :key="`line-${value}-${index}`"
         stroke="#e5e7eb"
         :width="containerWidth - leftmargin"
         :x1="leftmargin"
@@ -160,23 +165,26 @@ provideAxisChart({
     </g>
     <g
       v-for="(item, outerIdx) in cleanedDataset"
+      :key="item.name"
       :data-va-name="item.name"
       :data-width="drawWidth"
       class="va-bars"
     >
       <BarRect
         v-for="(value, index) in item.values"
+        :key="`bar-${index}-${item.name}`"
         :color="item.color"
         :value="value"
         :index="index"
         :name="item.name"
-        :outerIdx="outerIdx"
+        :outer-idx="outerIdx"
         :stacked="props.stacked"
       />
     </g>
     <g class="va-hover-triggers" style="opacity: 0">
       <rect
         v-for="(_, index) in labels"
+        :key="`trigger-${index}`"
         :x="getXPosition(index) - barGap / 2"
         :y="yOffset"
         :data-idx="index"

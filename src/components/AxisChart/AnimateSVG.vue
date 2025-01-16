@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { useAxisChart } from "../../composables/AxisChart/provider";
+import { useAxisChart } from '../../composables/AxisChart/provider'
 
 defineProps({
   delay: {
     type: Number,
     default: 0,
   },
-});
+})
 
-const { animationDuration, disableAnimation } = useAxisChart();
+const { animationDuration, disableAnimation } = useAxisChart()
 </script>
 
 <template>

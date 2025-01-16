@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import { computed } from "vue";
-import { useAxisChart } from "../../composables/AxisChart/provider";
+import { computed } from 'vue'
+import { useAxisChart } from '../../composables/AxisChart/provider'
 
-const { hoverIndex, getXPosition, barWidth, barGap, yOffset, containerHeight } =
-  useAxisChart();
+const { hoverIndex, getXPosition, barWidth, barGap, yOffset, containerHeight }
+  = useAxisChart()
 
-const isHovering = computed(() => hoverIndex.value !== null);
+const isHovering = computed(() => hoverIndex.value !== null)
 const hoverRectX = computed(() =>
   hoverIndex.value !== null
     ? getXPosition(hoverIndex.value) - barGap.value / 2
     : 0,
-);
+)
 
-const rectHeight = computed(() => containerHeight.value - 2 * yOffset);
+const rectHeight = computed(() => containerHeight.value - 2 * yOffset)
 </script>
 
 <template>
