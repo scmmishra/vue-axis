@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     lib: {
       formats: ['es'],
-      name: 'huchet-vue',
+      name: 'vue-axis',
       fileName: (_, name) => `${name}.mjs`,
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
