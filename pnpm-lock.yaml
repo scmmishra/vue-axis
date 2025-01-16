@@ -26,6 +26,9 @@ importers:
 
   packages/axis:
     devDependencies:
+      '@vitejs/plugin-vue':
+        specifier: ^5.2.1
+        version: 5.2.1(vite@6.0.7(jiti@2.4.2)(yaml@2.5.1))(vue@3.5.13(typescript@5.7.3))
       vite:
         specifier: ^6.0.7
         version: 6.0.7(jiti@2.4.2)(yaml@2.5.1)
@@ -689,6 +692,13 @@ packages:
   '@typescript-eslint/visitor-keys@8.20.0':
     resolution: {integrity: sha512-v/BpkeeYAsPkKCkR8BDwcno0llhzWVqPOamQrAEMdpZav2Y9OVjd9dwJyBLJWwf335B5DmlifECIkZRJCaGaHA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@vitejs/plugin-vue@5.2.1':
+    resolution: {integrity: sha512-cxh314tzaWwOLqVes2gnnCtvBDcM1UMdn+iFR+UjAn411dPT3tOmqrJjbMd7koZpMAmBM/GqeV4n9ge7JSiJJQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      vite: ^5.0.0 || ^6.0.0
+      vue: ^3.2.25
 
   '@vitest/eslint-plugin@1.1.25':
     resolution: {integrity: sha512-u8DpDnMbPcqBmJOB4PeEtn6q7vKmLVTLFMpzoxSAo0hjYdl4iYSHRleqwPQo0ywc7UV0S6RKIahYRQ3BnZdMVw==}
@@ -3217,6 +3227,11 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.20.0
       eslint-visitor-keys: 4.2.0
+
+  '@vitejs/plugin-vue@5.2.1(vite@6.0.7(jiti@2.4.2)(yaml@2.5.1))(vue@3.5.13(typescript@5.7.3))':
+    dependencies:
+      vite: 6.0.7(jiti@2.4.2)(yaml@2.5.1)
+      vue: 3.5.13(typescript@5.7.3)
 
   '@vitest/eslint-plugin@1.1.25(@typescript-eslint/utils@8.20.0(eslint@9.18.0(jiti@2.4.2))(typescript@5.7.3))(eslint@9.18.0(jiti@2.4.2))(typescript@5.7.3)':
     dependencies:
