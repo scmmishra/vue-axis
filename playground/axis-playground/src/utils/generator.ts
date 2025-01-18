@@ -1,4 +1,4 @@
-export function generateNumbers(length, min, max) {
+export function generateNumbers(length: number, min: number, max: number) {
   return Array.from(
     { length },
     () => Math.floor(Math.random() * (max - min + 1)) + min,
@@ -12,7 +12,10 @@ const granularityMap = {
   year: 365 * 24 * 60 * 60 * 1000,
 };
 
-export function generateDates(length, granularity = "day") {
+export function generateDates(
+  length: number,
+  granularity: "day" | "week" | "month" | "year" = "day",
+) {
   const now = Date.now();
 
   return Array.from({ length }, (_, i) => {

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@composables/*": ["src/composables/*"],
+      "@utils/*": ["src/utils/*"]
+    },
+    "resolveJsonModule": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
