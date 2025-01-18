@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { useAxisChart } from '../../composables/AxisChart/provider'
 
-defineProps({
-  delay: {
-    type: Number,
-    default: 0,
-  },
+interface Props {
+  delay?: number
+}
+
+withDefaults(defineProps<Props>(), {
+  delay: 0
 })
 
 const { animationDuration, disableAnimation } = useAxisChart()
