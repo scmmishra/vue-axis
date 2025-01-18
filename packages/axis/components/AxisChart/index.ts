@@ -1,1 +1,1 @@
-export { default as AxisChart } from "./AxisChart.vue";
+export { default as AxisChart } from './AxisChart.vue'

@@ -1,1 +1,1 @@
-export * from "../components/AxisChart";
+export * from '../components/AxisChart'
